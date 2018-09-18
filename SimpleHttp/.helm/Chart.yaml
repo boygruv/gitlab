@@ -1,0 +1,4 @@
+apiVersion: v2
+description: A Helm chart for Kubernetes
+name: test-app
+version: 0.4.6

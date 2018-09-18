@@ -1,0 +1,29 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  tags: 
+      - SHell
+  script:
+      - dapp --version
+      - dapp dimg build --build-dir ~/dapp_build/${CI_PROJECT_NAME}
+      - dapp dimg push --build-dir ~/dapp_build/${CI_PROJECT_NAME} ${CI_REGISTRY_IMAGE} --tag-ci
+
+deploy:
+  stage: deploy
+  tags: 
+      - SHell
+  script:
+      - dapp --version
+      - echo "$CI_REGISTRY_IMAGE" 
+      - dapp kube deploy
+        --tag-ci
+        --namespace ${CI_PROJECT_NAME}-stage
+        --set "global.env=stage"
+        --set "global.git_rev=${CI_COMMIT_SHA}"
+        $CI_REGISTRY_IMAGE
+
+      #- dapp dimg run test-app -d -p 9000:80 --rm
+        

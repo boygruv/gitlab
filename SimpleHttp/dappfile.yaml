@@ -1,0 +1,51 @@
+dimg: test-app
+from: webdevops/php-apache
+docker:
+  WORKDIR: /app
+  # Non-root user
+  USER: app
+  EXPOSE: "80" 
+  ENV:
+    PHP_MEMORY_LIMIT: "256M"
+ansible:
+  beforeInstall:
+    - name: "Create non-root group for the main application"
+      group:
+        name: app
+        state: present
+        gid: 242
+    - name: "Create non-root user for the main application"
+      user:
+        name: app
+        comment: "Create non-root user for the main application"
+        uid: 242
+        group: app
+        shell: /bin/bash
+        home: /app
+  setup:
+    - name: "Create HTML page"
+      copy:
+        content: |
+          <?php
+          echo "Version: 2";
+          phpinfo();
+        dest: /app/index.php
+        owner: app
+        group: app
+        mode: 0755
+#    - name: "Create Start file"
+#      copy:
+#        content: |
+#          #!/bin/bash
+#          cd /app
+#        dest: /app/start.sh
+#        owner: app
+#        group: app
+#        mode: 0755
+
+git:
+  - add: /
+    to: /app
+    owner: app
+    group: app
+

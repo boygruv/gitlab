@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: service-test
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: service_test_pod
+  template:
+    metadata:
+      labels:
+        app: service_test_pod
+    spec:
+      containers:
+      - name: simple-http
+        #image: python:2.7
+        image: {{ tuple "test-app" . |  include "dimg" }}
+        imagePullPolicy: IfNotPresent
+        #command: ["/bin/bash"]
+        #args: ["-c", "echo \"<p>Hello from $(hostname)</p> <h4> {{ .Chart.Version }} </h4>\" > index.html; python -m SimpleHTTPServer 8080"]
+        ports:
+        - name: http
+          containerPort: 8010
+          protocol: TCP
