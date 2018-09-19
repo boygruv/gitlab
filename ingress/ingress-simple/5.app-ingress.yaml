@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: app-ingress
+spec:
+  rules:
+# Для https: параметр host убираем
+# Для http:  можно прописать перед именем хоста ссылку на приложение: <app_name>.master.boygruv.lc
+  - host: master.boygruv.lc
+    http:
+      paths:
+      - backend:
+          serviceName: service-test-svc
+          servicePort: 8010
+        path: /app1
+      - backend:
+          serviceName: nginx-ingress
+          servicePort: 18080
+        path: /nginx_status
+
