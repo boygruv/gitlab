@@ -6,8 +6,6 @@ metadata:
   name: app-ingress
 spec:
   rules:
-# Для https: параметр host убираем
-# Для http:  можно прописать перед именем хоста ссылку на приложение: <app_name>.master.boygruv.lc
   - host: master.boygruv.lc
     http:
       paths:

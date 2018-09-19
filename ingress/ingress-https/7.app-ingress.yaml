@@ -10,8 +10,6 @@ spec:
       - master.boygruv.lc
       secretName: tls-certificate
   rules:
-# Для https: параметр host убираем
-# Для http:  прописываем перед именем хоста ссылку на приложение: <app_name>.master.boygruv.lc
   - http:
       paths:
       - backend:
